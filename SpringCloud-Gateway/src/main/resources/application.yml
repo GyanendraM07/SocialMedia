@@ -1,0 +1,166 @@
+server:
+  port: 9090
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+spring:
+  application: 
+    name: gateway
+  cloud:
+    gateway:
+      default-filters:
+        - TokenRelay
+      routes:
+        - id: microservice-1
+          uri: http://localhost:8082/
+          predicates:
+            - Path=/api/**
+        - id: microservice-2
+          uri: http://localhost:8084/
+          predicates:
+            - Path=/create/**
+        - id: microservice-2
+          uri: http://localhost:8084/
+          predicates:
+            - Path=/profile/**
+#        - id: notification_service
+#          uri: http://11.0.0.118:8816/notification_service/
+#          predicates:
+#            - Path=/notification_service/**
+#        - id: sau_details
+#          uri: http://11.0.0.118:8051/sau_data/
+#          predicates:
+#            - Path=/sau_data/**
+#        - id: personal_info_service
+#          uri: http://11.0.0.118:8199/personal_info_service/
+#          predicates:
+#            - Path=/personal_info_service/**
+#        - id: rti
+#          uri: http://11.0.0.137:8082/
+#          predicates:
+#            - Path=/rti/**
+#        - id: rti-register
+#          uri: http://11.0.0.137:8083/
+#          predicates:
+#            - Path=/rti-register/**
+#        - id: pa
+#          uri: http://11.0.0.118:8097/create_personal_app/
+#          predicates:
+#            - Path=/create_personal_app/**
+#        - id: personalinfo
+#          uri: http://11.0.0.118:8199/personal_info_service/
+#          predicates:
+#            - Path=/personal_info_service/**
+#        - id: retreival
+#          uri: http://11.0.0.109:8280/retrieval_service/
+#          predicates:
+#            - Path=/retrieval_service/**
+#        - id: send
+#          uri: http://11.0.0.109:8281/send_service/
+#          predicates:
+#            - Path=/send_service/**
+#        - id: sign
+#          uri: http://11.0.0.118:8283/sign_service/
+#          predicates:
+#            - Path=/sign_service/**
+#        - id: util
+#          uri: http://11.0.0.109:8285/util_service/
+#          predicates:
+#            - Path=/util_service/**
+#        - id: micro
+#          uri: http://11.0.0.118:8093/micro_project/
+#          predicates:
+#            - Path=/micro_project/**
+#        - id: service
+#          uri: http://11.0.0.118:9070/webservices/
+#          predicates:
+#            - Path=/webservices/**
+#        - id: pc
+#          uri: http://11.0.0.109:9088/partcase_service/
+#          predicates:
+#            - Path=/partcase_service/**
+#        - id: forward
+#          uri: http://11.0.0.109:9025/forward_service/
+#          predicates:
+#            - Path=/forward_service/**
+#        - id: sau
+#          uri: http://11.0.0.118:8051/sau_data/
+#          predicates:
+#            - Path=/sau_data/**
+#        - id: history
+#          uri: http://11.0.0.118:8812/history_service/
+#          predicates:
+#            - Path=/history_service/**
+#        - id: mergepc
+#          uri: http://11.0.0.109:8052/merge_partcase_service/
+#          predicates:
+#            - Path=/merge_partcase_service/**
+#        - id: workflow
+#          uri: http://11.0.0.118:8091/workflow-gateway/
+#          predicates:
+#            - Path=/workflow-gateway/**
+#        - id: mergedocsservice
+#          uri: http://11.0.0.118:8019/merge_docs_service/
+#          predicates:
+#            - Path=/merge_docs_service/**
+#        - id: dashboard
+#          uri: http://11.0.0.109:8094/dashboard_service/
+#          predicates:
+#            - Path=/dashboard_service/**
+#        - id: mergePartCase
+#          uri: http://11.0.0.118:8099/mergePCase/
+#          predicates:
+#            - Path=/mergePCase/**
+#        - id: workflowA
+#          uri: http://11.0.0.137:8005/workflowPA/
+#          predicates:
+#            - Path=/workflowPA/**
+#        - id: advancesearch
+#          uri: http://11.0.0.108:8888/
+#          predicates:
+#            - Path=/esearch/**
+#        - id: admindashboard
+#          uri: http://11.0.0.117:8089/
+#          predicates:
+#            - Path=/adminDBoard/**
+#        - id: annexure
+#          uri: http://11.0.0.118:8095/annexure_service/
+#          predicates:
+#            - Path=/workflowPA/**
+#        - id: annotation
+#          uri: http://11.0.0.118:8096/annotation_service/
+#          predicates:
+#            - Path=/esearch/**
+#        - id: cpf
+#          uri: http://11.0.0.118:8099/create_personal_file/
+#          predicates:
+#            - Path=/adminDBoard/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods: "*" 
+            
+      
+  security:
+    oauth2:
+      client:
+        provider:
+          my-keycloak-provider:
+            issuer-uri: http://localhost:8080/auth/realms/sample
+        registration:
+          keycloak-spring-gateway-client:
+            provider: my-keycloak-provider
+            client-id: social_service
+            client-secret: 3cc86b99-db37-42af-aee0-04c61a331b9d
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8080/auth/realms/sample/protocol/openid-connect/certs
+          
+            
